@@ -18,10 +18,11 @@ using System.Threading.Tasks;
 [SetUpFixture]
 public class Testing
 {   
-    private static IConfigurationRoot _configuration;
-    private static IServiceScopeFactory _scopeFactory;
-    private static Checkpoint _checkpoint;
-    private static string _currentUserId;
+    private static IConfigurationRoot configuration;
+    private static IWebHostEnvironment environment;
+    private static IServiceScopeFactory scopeFactory;
+    private static Checkpoint checkpoint;
+    private static string currentUserId;
 
     [OneTimeSetUp]
     public void RunBeforeAnyTests()
@@ -31,15 +32,16 @@ public class Testing
             .AddJsonFile("appsettings.json", true, true)
             .AddEnvironmentVariables();
 
-        _configuration = builder.Build();
+        configuration = builder.Build();
+        environment = Mock.Of<IWebHostEnvironment>(w =>
+            w.EnvironmentName == "Development" &&
+            w.ApplicationName == "CleanArchitecture.WebUI");
 
-        var startup = new Startup(_configuration);
+        var startup = new Startup(configuration, environment);
 
         var services = new ServiceCollection();
 
-        services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
-            w.EnvironmentName == "Development" &&
-            w.ApplicationName == "CleanArchitecture.WebUI"));
+        services.AddSingleton(environment);
 
         services.AddLogging();
 
@@ -54,11 +56,11 @@ public class Testing
 
         // Register testing version
         services.AddTransient(provider =>
-            Mock.Of<ICurrentUserService>(s => s.UserId == _currentUserId));
+            Mock.Of<ICurrentUserService>(s => s.UserId == currentUserId));
 
-        _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
+        scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
         
-        _checkpoint = new Checkpoint
+        checkpoint = new Checkpoint
         {
             TablesToIgnore = new [] { "__EFMigrationsHistory" }
         };
@@ -68,7 +70,7 @@ public class Testing
 
     private static void EnsureDatabase()
     {
-        using var scope = _scopeFactory.CreateScope();
+        using var scope = scopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
@@ -77,7 +79,7 @@ public class Testing
 
     public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
     {
-        using var scope = _scopeFactory.CreateScope();
+        using var scope = scopeFactory.CreateScope();
 
         var mediator = scope.ServiceProvider.GetService<IMediator>();
 
@@ -91,7 +93,7 @@ public class Testing
 
     public static async Task<string> RunAsUserAsync(string userName, string password)
     {
-        using var scope = _scopeFactory.CreateScope();
+        using var scope = scopeFactory.CreateScope();
 
         var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
@@ -99,21 +101,21 @@ public class Testing
 
         var result = await userManager.CreateAsync(user, password);
 
-        _currentUserId = user.Id;
+        currentUserId = user.Id;
 
-        return _currentUserId;
+        return currentUserId;
     }
 
     public static async Task ResetState()
     {
-        await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
-        _currentUserId = null;
+        await checkpoint.Reset(configuration.GetConnectionString("DefaultConnection"));
+        currentUserId = null;
     }
 
     public static async Task<TEntity> FindAsync<TEntity>(int id)
         where TEntity : class
     {
-        using var scope = _scopeFactory.CreateScope();
+        using var scope = scopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
@@ -123,7 +125,7 @@ public class Testing
     public static async Task AddAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
-        using var scope = _scopeFactory.CreateScope();
+        using var scope = scopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
