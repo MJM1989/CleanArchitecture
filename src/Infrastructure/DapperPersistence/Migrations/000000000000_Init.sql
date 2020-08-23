@@ -2,7 +2,7 @@ CREATE TABLE [dbo].[_migrations]
 (
     [Name]       nvarchar(100) NOT NULL,
     [ExecutedOn] datetime2(0)  NOT NULL,
-    CONSTRAINT [PK__migrations_Name] PRIMARY KEY (Name)
+    CONSTRAINT [PK__migrations_Name] PRIMARY KEY ([Name])
 )
 
 CREATE TABLE [dbo].[ApplicationUsers]
@@ -10,6 +10,9 @@ CREATE TABLE [dbo].[ApplicationUsers]
     [Id]                 uniqueidentifier NOT NULL PRIMARY KEY ROWGUIDCOL DEFAULT (NEWID()),
     [UserName]           nvarchar(256)    NOT NULL,
     [NormalizedUserName] nvarchar(256)    NOT NULL,
+    [Email]              nvarchar(256)    NULL,
+    [NormalizedEmail]    nvarchar(256)    NULL,
+    [EmailConfirmed]     bit              NOT NULL,
     [PasswordHash]       nvarchar(max)    NULL,
     INDEX [IX_ApplicationUsers_NormalizedUserName] ([NormalizedUserName])
 )

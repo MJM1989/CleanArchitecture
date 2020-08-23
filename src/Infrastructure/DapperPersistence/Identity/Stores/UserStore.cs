@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores
 {
-    public class UserStore : IUserStore<ApplicationUser>
+    public class UserStore : IUserStore<ApplicationUser>, IUserEmailStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>
     {
         private readonly IGetDbConnection getDbConnection;
 
@@ -32,10 +32,16 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores
                     INSERT INTO [dbo].[ApplicationUsers]
                         ( [UserName]
                         , [NormalizedUserName]
+                        , [Email]
+                        , [NormalizedEmail]
+                        , [EmailConfirmed]
                         , [PasswordHash]
                         )
                     VALUES ( [@UserName]
                            , [@NormalizedUserName]
+                           , [@Email]
+                           , [@NormalizedEmail]
+                           , [@EmailConfirmed]
                            , [@PasswordHash]
                            )
                     SELECT cast(scope_identity() AS uniqueidentifier)");
@@ -104,6 +110,64 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores
             bool succeeded = await connection.UpdateAsync<ApplicationUser>(user);
 
             return succeeded ? IdentityResult.Success : IdentityResult.Failed(new IdentityError { Description = "Failed to update user"});
+        }
+
+        public async Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            using IDbConnection connection = getDbConnection.Get();
+
+            return await connection.QuerySingleOrDefaultAsync<ApplicationUser>($@"
+                    SELECT * FROM [dbo].[ApplicationUsers] WHERE NormalizedEmail = @{nameof(normalizedEmail)}",
+                new {normalizedEmail});
+        }
+
+        public Task<string> GetEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.NormalizedEmail);
+        }
+
+        public Task SetEmailAsync(ApplicationUser user, string email, CancellationToken cancellationToken)
+        {
+            user.Email = email;
+            return Task.CompletedTask;
+        }
+
+        public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.EmailConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        public Task SetNormalizedEmailAsync(ApplicationUser user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            user.NormalizedEmail = normalizedEmail;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetPasswordHashAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash);
+        }
+
+        public Task<bool> HasPasswordAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash != null);
+        }
+
+        public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.CompletedTask;
         }
     }
 }
