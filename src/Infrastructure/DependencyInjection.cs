@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Infrastructure.DapperPersistence;
+using CleanArchitecture.Infrastructure.DapperPersistence.Database;
 using CleanArchitecture.Infrastructure.Files;
 using CleanArchitecture.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Persistence;

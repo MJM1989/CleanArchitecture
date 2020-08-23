@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CleanArchitecture.Infrastructure.DapperPersistence.Database;
 using Dapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
