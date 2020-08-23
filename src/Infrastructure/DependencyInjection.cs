@@ -41,7 +41,7 @@ namespace CleanArchitecture.Infrastructure
                 "../Infrastructure/Persistence/SQL/Migrations/"));
             services.AddSingleton(migrationsPath);
             
-            new DatabaseMigration(environment, connectionString, migrationsPath).Execute();
+            // new DatabaseMigration(environment, connectionString, migrationsPath).Execute();
             
             return services;
         }
