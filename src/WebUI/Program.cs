@@ -1,4 +1,3 @@
-using CleanArchitecture.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using CleanArchitecture.Infrastructure.DapperPersistence;
+using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
 
 namespace CleanArchitecture.WebUI
 {
@@ -32,8 +33,8 @@ namespace CleanArchitecture.WebUI
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-                    await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
-                    await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+                    await ApplicationSeeder.SeedDefaultUserAsync(userManager);
+                    await ApplicationSeeder.SeedSampleDataAsync(context);
                 }
                 catch (Exception ex)
                 {
