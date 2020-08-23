@@ -72,7 +72,7 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores
             using IDbConnection connection = getDbConnection.Get();
 
             return await connection.QuerySingleOrDefaultAsync<ApplicationUser>($@"
-                    SELECT * FROM [dbo].[ApplicationUsers] WHERE UserName = @{nameof(normalizedUserName)}",
+                    SELECT * FROM [dbo].[ApplicationUsers] WHERE [NormalizedUserName] = @{nameof(normalizedUserName)}",
                 new {normalizedUserName});
         }
 
