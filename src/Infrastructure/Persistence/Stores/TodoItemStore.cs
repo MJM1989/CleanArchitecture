@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Stores;
-using DbTodoItem = CleanArchitecture.Infrastructure.DapperPersistence.Entities.TodoItem;
 using CleanArchitecture.Domain.Entities;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using DbTodoItem = CleanArchitecture.Infrastructure.Persistence.Entities.TodoItem;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Stores
+namespace CleanArchitecture.Infrastructure.Persistence.Stores
 {
     public class TodoItemStore : ITodoItemStore
     {

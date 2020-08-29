@@ -8,11 +8,11 @@ using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Stores;
 using CleanArchitecture.Domain.Entities;
 using Dapper;
-using DbTodoList = CleanArchitecture.Infrastructure.DapperPersistence.Entities.TodoList;
-using DbTodoItem = CleanArchitecture.Infrastructure.DapperPersistence.Entities.TodoItem;
 using Dapper.Contrib.Extensions;
+using DbTodoList = CleanArchitecture.Infrastructure.Persistence.Entities.TodoList;
+using DbTodoItem = CleanArchitecture.Infrastructure.Persistence.Entities.TodoItem;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Stores
+namespace CleanArchitecture.Infrastructure.Persistence.Stores
 {
     public class TodoListStore : ITodoListStore
     {

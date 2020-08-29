@@ -1,4 +1,4 @@
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Database
+namespace CleanArchitecture.Infrastructure.Persistence.Database
 {
     public sealed class ConnectionString
     {

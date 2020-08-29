@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using CleanArchitecture.Infrastructure.DapperPersistence.Common;
+using CleanArchitecture.Infrastructure.Persistence.Common;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Entities
+namespace CleanArchitecture.Infrastructure.Persistence.Entities
 {
     public class TodoList : AuditableEntity
     {

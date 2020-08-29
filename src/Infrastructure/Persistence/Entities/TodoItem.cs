@@ -1,8 +1,8 @@
 using System;
 using CleanArchitecture.Domain.Enums;
-using CleanArchitecture.Infrastructure.DapperPersistence.Common;
+using CleanArchitecture.Infrastructure.Persistence.Common;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Entities
+namespace CleanArchitecture.Infrastructure.Persistence.Entities
 {
     public class TodoItem : AuditableEntity
     {

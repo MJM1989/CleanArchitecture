@@ -1,4 +1,4 @@
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Common
+namespace CleanArchitecture.Infrastructure.Persistence.Common
 {
     public abstract class Entity
     {

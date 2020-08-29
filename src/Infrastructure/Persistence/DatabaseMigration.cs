@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CleanArchitecture.Infrastructure.DapperPersistence.Database;
+using CleanArchitecture.Infrastructure.Persistence.Database;
 using Dapper;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence
+namespace CleanArchitecture.Infrastructure.Persistence
 {
     public class DatabaseMigration : IMigrateDatabase
     {

@@ -6,9 +6,9 @@ using CleanArchitecture.Application.Common.Models;
 using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ApplicationUser = CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models.ApplicationUser;
+using ApplicationUser = CleanArchitecture.Infrastructure.Persistence.Identity.Models.ApplicationUser;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity
+namespace CleanArchitecture.Infrastructure.Persistence.Identity
 {
     public class IdentityService : IIdentityService
     {

@@ -4,7 +4,7 @@ using CleanArchitecture.Application.TodoItems.Commands.DeleteTodoItem;
 using CleanArchitecture.Application.TodoLists.Commands.CreateTodoList;
 using FluentAssertions;
 using System.Threading.Tasks;
-using CleanArchitecture.Infrastructure.DapperPersistence.Entities;
+using CleanArchitecture.Infrastructure.Persistence.Entities;
 using NUnit.Framework;
 
 namespace CleanArchitecture.Application.IntegrationTests.TodoItems.Commands

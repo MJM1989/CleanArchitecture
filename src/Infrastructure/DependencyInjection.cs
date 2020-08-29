@@ -1,20 +1,20 @@
 ﻿using System.IO;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Stores;
-using CleanArchitecture.Infrastructure.DapperPersistence;
-using CleanArchitecture.Infrastructure.DapperPersistence.Database;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores;
-using CleanArchitecture.Infrastructure.DapperPersistence.Stores;
 using CleanArchitecture.Infrastructure.Files;
+using CleanArchitecture.Infrastructure.Persistence;
+using CleanArchitecture.Infrastructure.Persistence.Database;
+using CleanArchitecture.Infrastructure.Persistence.Identity;
+using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
+using CleanArchitecture.Infrastructure.Persistence.Identity.Stores;
+using CleanArchitecture.Infrastructure.Persistence.Stores;
 using CleanArchitecture.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ApplicationUser = CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models.ApplicationUser;
+using ApplicationUser = CleanArchitecture.Infrastructure.Persistence.Identity.Models.ApplicationUser;
 
 namespace CleanArchitecture.Infrastructure
 {

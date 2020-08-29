@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using CleanArchitecture.Infrastructure.DapperPersistence.Database;
-using CleanArchitecture.Infrastructure.DapperPersistence.Entities;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
+using CleanArchitecture.Infrastructure.Persistence.Database;
+using CleanArchitecture.Infrastructure.Persistence.Entities;
+using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence
+namespace CleanArchitecture.Infrastructure.Persistence
 {
     public static class ApplicationSeeder
     {

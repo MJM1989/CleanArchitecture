@@ -8,7 +8,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System;
-using CleanArchitecture.Infrastructure.DapperPersistence.Entities;
+using CleanArchitecture.Infrastructure.Persistence.Entities;
 
 namespace CleanArchitecture.Application.IntegrationTests.TodoItems.Commands
 {

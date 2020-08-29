@@ -1,6 +1,6 @@
 using System;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models
+namespace CleanArchitecture.Infrastructure.Persistence.Identity.Models
 {
     public class ApplicationUser
     {

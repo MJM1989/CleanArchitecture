@@ -5,9 +5,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using CleanArchitecture.Infrastructure.DapperPersistence;
-using CleanArchitecture.Infrastructure.DapperPersistence.Database;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
+using CleanArchitecture.Infrastructure.Persistence;
+using CleanArchitecture.Infrastructure.Persistence.Database;
+using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
 
 namespace CleanArchitecture.WebUI
 {

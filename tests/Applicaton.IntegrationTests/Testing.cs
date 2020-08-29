@@ -12,10 +12,9 @@ using Respawn;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CleanArchitecture.Infrastructure.DapperPersistence;
-using CleanArchitecture.Infrastructure.DapperPersistence.Common;
-using CleanArchitecture.Infrastructure.DapperPersistence.Database;
-using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
+using CleanArchitecture.Infrastructure.Persistence;
+using CleanArchitecture.Infrastructure.Persistence.Common;
+using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
 using Dapper.Contrib.Extensions;
 
 [SetUpFixture]
