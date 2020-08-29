@@ -1,9 +1,9 @@
 ﻿using CleanArchitecture.Application.Common.Exceptions;
-using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoLists.Commands.UpdateTodoList
 {
@@ -16,16 +16,16 @@ namespace CleanArchitecture.Application.TodoLists.Commands.UpdateTodoList
 
     public class UpdateTodoListCommandHandler : IRequestHandler<UpdateTodoListCommand>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoListStore todoListStore;
 
-        public UpdateTodoListCommandHandler(IApplicationDbContext context)
+        public UpdateTodoListCommandHandler(ITodoListStore todoListStore)
         {
-            _context = context;
+            this.todoListStore = todoListStore;
         }
 
         public async Task<Unit> Handle(UpdateTodoListCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.TodoLists.FindAsync(request.Id);
+            TodoList entity = await todoListStore.GetAsync(request.Id);
 
             if (entity == null)
             {
@@ -34,7 +34,7 @@ namespace CleanArchitecture.Application.TodoLists.Commands.UpdateTodoList
 
             entity.Title = request.Title;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoListStore.UpdateAsync(entity, cancellationToken);
 
             return Unit.Value;
         }

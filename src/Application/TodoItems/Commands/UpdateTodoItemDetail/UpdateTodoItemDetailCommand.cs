@@ -5,6 +5,7 @@ using CleanArchitecture.Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItemDetail
 {
@@ -21,27 +22,27 @@ namespace CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItemDetail
 
     public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItemDetailCommand>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoItemStore todoItemStore;
 
-        public UpdateTodoItemDetailCommandHandler(IApplicationDbContext context)
+        public UpdateTodoItemDetailCommandHandler(ITodoItemStore todoItemStore)
         {
-            _context = context;
+            this.todoItemStore = todoItemStore;
         }
 
         public async Task<Unit> Handle(UpdateTodoItemDetailCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.TodoItems.FindAsync(request.Id);
+            TodoItem todoItem = await todoItemStore.GetAsync(request.Id);
 
-            if (entity == null)
+            if (todoItem == null)
             {
                 throw new NotFoundException(nameof(TodoItem), request.Id);
             }
 
-            entity.ListId = request.ListId;
-            entity.Priority = request.Priority;
-            entity.Note = request.Note;
+            todoItem.ListId = request.ListId;
+            todoItem.Priority = request.Priority;
+            todoItem.Note = request.Note;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoItemStore.UpdateAsync(todoItem, cancellationToken);
 
             return Unit.Value;
         }

@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace CleanArchitecture.Infrastructure.DapperPersistence.Database
+namespace CleanArchitecture.Application.Common.Interfaces
 {
     public interface IGetDbConnection
     {

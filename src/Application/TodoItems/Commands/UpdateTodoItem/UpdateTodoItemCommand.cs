@@ -4,6 +4,7 @@ using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItem
 {
@@ -18,26 +19,26 @@ namespace CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItem
 
     public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateTodoItemCommand>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoItemStore todoItemStore;
 
-        public UpdateTodoItemCommandHandler(IApplicationDbContext context)
+        public UpdateTodoItemCommandHandler(ITodoItemStore todoItemStore)
         {
-            _context = context;
+            this.todoItemStore = todoItemStore;
         }
 
         public async Task<Unit> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.TodoItems.FindAsync(request.Id);
+            TodoItem todoItem = await todoItemStore.GetAsync(request.Id);
 
-            if (entity == null)
+            if (todoItem == null)
             {
                 throw new NotFoundException(nameof(TodoItem), request.Id);
             }
 
-            entity.Title = request.Title;
-            entity.Done = request.Done;
+            todoItem.Title = request.Title;
+            todoItem.Done = request.Done;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoItemStore.UpdateAsync(todoItem, cancellationToken);
 
             return Unit.Value;
         }

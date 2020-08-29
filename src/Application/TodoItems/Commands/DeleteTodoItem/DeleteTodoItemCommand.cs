@@ -4,6 +4,7 @@ using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoItems.Commands.DeleteTodoItem
 {
@@ -14,25 +15,23 @@ namespace CleanArchitecture.Application.TodoItems.Commands.DeleteTodoItem
 
     public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteTodoItemCommand>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoItemStore todoItemStore;
 
-        public DeleteTodoItemCommandHandler(IApplicationDbContext context)
+        public DeleteTodoItemCommandHandler(ITodoItemStore todoItemStore)
         {
-            _context = context;
+            this.todoItemStore = todoItemStore;
         }
 
         public async Task<Unit> Handle(DeleteTodoItemCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.TodoItems.FindAsync(request.Id);
+            TodoItem todoItem = await todoItemStore.GetAsync(request.Id);
 
-            if (entity == null)
+            if (todoItem == null)
             {
                 throw new NotFoundException(nameof(TodoItem), request.Id);
             }
 
-            _context.TodoItems.Remove(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoItemStore.DeleteAsync(todoItem, cancellationToken);
 
             return Unit.Value;
         }

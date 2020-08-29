@@ -1,19 +1,20 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
+using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.TodoLists.Commands.UpdateTodoList
 {
     public class UpdateTodoListCommandValidator : AbstractValidator<UpdateTodoListCommand>
     {
-        private readonly IApplicationDbContext _context;
-
-        public UpdateTodoListCommandValidator(IApplicationDbContext context)
+        private readonly ITodoListStore todoListStore;
+        public UpdateTodoListCommandValidator(ITodoListStore todoListStore)
         {
-            _context = context;
+            this.todoListStore = todoListStore;
 
             RuleFor(v => v.Title)
                 .NotEmpty().WithMessage("Title is required.")
@@ -21,11 +22,11 @@ namespace CleanArchitecture.Application.TodoLists.Commands.UpdateTodoList
                 .MustAsync(BeUniqueTitle).WithMessage("The specified title already exists.");
         }
 
-        public async Task<bool> BeUniqueTitle(UpdateTodoListCommand model, string title, CancellationToken cancellationToken)
+        private async Task<bool> BeUniqueTitle(UpdateTodoListCommand model, string title, CancellationToken cancellationToken)
         {
-            return await _context.TodoLists
-                .Where(l => l.Id != model.Id)
-                .AllAsync(l => l.Title != title);
+            IEnumerable<TodoList> lists = await todoListStore.GetByTitle(title);
+
+            return lists.All(list => list.Id != model.Id);
         }
     }
 }

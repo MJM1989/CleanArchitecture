@@ -3,6 +3,7 @@ using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem
 {
@@ -15,11 +16,11 @@ namespace CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem
 
     public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, int>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoItemStore todoItemStore;
 
-        public CreateTodoItemCommandHandler(IApplicationDbContext context)
+        public CreateTodoItemCommandHandler(ITodoItemStore todoItemStore)
         {
-            _context = context;
+            this.todoItemStore = todoItemStore;
         }
 
         public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
@@ -31,9 +32,7 @@ namespace CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem
                 Done = false
             };
 
-            _context.TodoItems.Add(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoItemStore.InsertAsync(entity, cancellationToken);
 
             return entity.Id;
         }

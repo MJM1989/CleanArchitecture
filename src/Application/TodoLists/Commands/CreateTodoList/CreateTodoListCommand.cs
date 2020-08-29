@@ -3,34 +3,30 @@ using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoLists.Commands.CreateTodoList
 {
-    public partial class CreateTodoListCommand : IRequest<int>
+    public class CreateTodoListCommand : IRequest<int>
     {
         public string Title { get; set; }
     }
 
     public class CreateTodoListCommandHandler : IRequestHandler<CreateTodoListCommand, int>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoListStore todoListStore;
 
-        public CreateTodoListCommandHandler(IApplicationDbContext context)
+        public CreateTodoListCommandHandler(ITodoListStore todoListStore)
         {
-            _context = context;
+            this.todoListStore = todoListStore;
         }
 
         public async Task<int> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
         {
-            var entity = new TodoList();
+            var entity = new TodoList { Title = request.Title };
 
-            entity.Title = request.Title;
 
-            _context.TodoLists.Add(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return entity.Id;
+            return await todoListStore.InsertAsync(entity);
         }
     }
 }

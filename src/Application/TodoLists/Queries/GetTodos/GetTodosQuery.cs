@@ -5,9 +5,12 @@ using CleanArchitecture.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
+using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.TodoLists.Queries.GetTodos
 {
@@ -17,13 +20,13 @@ namespace CleanArchitecture.Application.TodoLists.Queries.GetTodos
 
     public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly ITodoListStore todoListStore;
+        private readonly IMapper mapper;
 
-        public GetTodosQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetTodosQueryHandler(ITodoListStore todoListStore, IMapper mapper)
         {
-            _context = context;
-            _mapper = mapper;
+            this.todoListStore = todoListStore;
+            this.mapper = mapper;
         }
 
         public async Task<TodosVm> Handle(GetTodosQuery request, CancellationToken cancellationToken)
@@ -35,10 +38,9 @@ namespace CleanArchitecture.Application.TodoLists.Queries.GetTodos
                     .Select(p => new PriorityLevelDto { Value = (int)p, Name = p.ToString() })
                     .ToList(),
 
-                Lists = await _context.TodoLists
-                    .ProjectTo<TodoListDto>(_mapper.ConfigurationProvider)
+                Lists = mapper.Map<IEnumerable<TodoListDto>>(await todoListStore.GetAllWithItemsAsync())
                     .OrderBy(t => t.Title)
-                    .ToListAsync(cancellationToken)
+                    .ToList()
             };
         }
     }

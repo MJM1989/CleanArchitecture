@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Infrastructure.DapperPersistence.Database;
 using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
 using Dapper;

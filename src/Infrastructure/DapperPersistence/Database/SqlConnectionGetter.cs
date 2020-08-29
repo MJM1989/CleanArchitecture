@@ -1,4 +1,5 @@
 using System.Data;
+using CleanArchitecture.Application.Common.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.DapperPersistence.Database

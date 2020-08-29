@@ -1,11 +1,9 @@
 ﻿using CleanArchitecture.Application.Common.Exceptions;
-using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Common.Stores;
 
 namespace CleanArchitecture.Application.TodoLists.Commands.DeleteTodoList
 {
@@ -16,27 +14,23 @@ namespace CleanArchitecture.Application.TodoLists.Commands.DeleteTodoList
 
     public class DeleteTodoListCommandHandler : IRequestHandler<DeleteTodoListCommand>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly ITodoListStore todoListStore;
 
-        public DeleteTodoListCommandHandler(IApplicationDbContext context)
+        public DeleteTodoListCommandHandler(ITodoListStore todoListStore)
         {
-            _context = context;
+            this.todoListStore = todoListStore;
         }
 
         public async Task<Unit> Handle(DeleteTodoListCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.TodoLists
-                .Where(l => l.Id == request.Id)
-                .SingleOrDefaultAsync(cancellationToken);
+            TodoList entity = await todoListStore.GetAsync(request.Id);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(TodoList), request.Id);
             }
 
-            _context.TodoLists.Remove(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await todoListStore.Delete(entity);
 
             return Unit.Value;
         }
