@@ -39,12 +39,12 @@ namespace CleanArchitecture.Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.UserId ?? string.Empty;
+                var userId = _currentUserService.UserId;
                 var userName = string.Empty;
 
-                if (!string.IsNullOrEmpty(userId))
+                if (userId.HasValue)
                 {
-                    userName = await _identityService.GetUserNameAsync(userId);
+                    userName = await _identityService.GetUserNameAsync(userId.Value);
                 }
 
                 _logger.LogWarning("CleanArchitecture Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",

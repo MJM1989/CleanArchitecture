@@ -19,13 +19,13 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity
             _userManager = userManager;
         }
 
-        public async Task<string> GetUserNameAsync(string userId)
+        public async Task<string> GetUserNameAsync(Guid userId)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == new Guid(userId));
+            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
 
             return user.UserName;
         }
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, Guid UserId)> CreateUserAsync(string userName, string password)
         {
             var user = new ApplicationUser
             {
@@ -35,12 +35,12 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity
 
             var result = await _userManager.CreateAsync(user, password);
 
-            return (result.ToApplicationResult(), user.Id.ToString());
+            return (result.ToApplicationResult(), user.Id);
         }
 
-        public async Task<Result> DeleteUserAsync(string userId)
+        public async Task<Result> DeleteUserAsync(Guid userId)
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == new Guid(userId));
+            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
             if (user != null)
             {
@@ -50,7 +50,7 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence.Identity
             return Result.Success();
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        private async Task<Result> DeleteUserAsync(ApplicationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
 

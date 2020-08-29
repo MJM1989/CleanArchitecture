@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-namespace CleanArchitecture.Domain.Common
+namespace CleanArchitecture.Infrastructure.DapperPersistence.Common
 {
-    public abstract class AuditableEntity
+    public abstract class AuditableEntity : Entity
     {
         public Guid CreatedBy { get; set; }
 

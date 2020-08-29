@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
+﻿using System;
+using CleanArchitecture.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -8,9 +9,14 @@ namespace CleanArchitecture.WebUI.Services
     {
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
-            UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userIdClaim = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (!string.IsNullOrEmpty(userIdClaim))
+            {
+                UserId = new Guid(userIdClaim);
+            }
         }
 
-        public string UserId { get; }
+        public Guid? UserId { get; }
     }
 }

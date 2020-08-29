@@ -2,15 +2,17 @@
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Infrastructure.DapperPersistence;
 using CleanArchitecture.Infrastructure.DapperPersistence.Database;
+using CleanArchitecture.Infrastructure.DapperPersistence.Identity;
+using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
+using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Stores;
 using CleanArchitecture.Infrastructure.Files;
-using CleanArchitecture.Infrastructure.Identity;
-using CleanArchitecture.Infrastructure.Persistence;
 using CleanArchitecture.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ApplicationUser = CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models.ApplicationUser;
 
 namespace CleanArchitecture.Infrastructure
 {
@@ -19,13 +21,14 @@ namespace CleanArchitecture.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration, IWebHostEnvironment environment)
         {
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
-
-                services.AddDefaultIdentity<ApplicationUser>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddTransient<IUserStore<ApplicationUser>, UserStore>();
+            services.AddTransient<IRoleStore<ApplicationRole>, RoleStore>();
+ 
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddDefaultTokenProviders();
             
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            // services.AddIdentityServer()
+            //     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
@@ -40,8 +43,8 @@ namespace CleanArchitecture.Infrastructure
             MigrationsPath migrationsPath = new MigrationsPath(Path.Combine(environment.ContentRootPath, 
                 "../Infrastructure/Persistence/SQL/Migrations/"));
             services.AddSingleton(migrationsPath);
-            
-            // new DatabaseMigration(environment, connectionString, migrationsPath).Execute();
+
+            services.AddSingleton<IMigrateDatabase, DatabaseMigration>();
             
             return services;
         }

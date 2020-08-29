@@ -9,15 +9,13 @@ using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.DapperPersistence
 {
-    public class DatabaseMigration
+    public class DatabaseMigration : IMigrateDatabase
     {
-        private readonly IWebHostEnvironment hostEnvironment;
         private readonly ConnectionString connectionString;
         private readonly MigrationsPath migrationsPath;
 
-        public DatabaseMigration(IWebHostEnvironment hostEnvironment, ConnectionString connectionString, MigrationsPath migrationsPath)
+        public DatabaseMigration(ConnectionString connectionString, MigrationsPath migrationsPath)
         {
-            this.hostEnvironment = hostEnvironment;
             this.connectionString = connectionString;
             this.migrationsPath = migrationsPath;
         }

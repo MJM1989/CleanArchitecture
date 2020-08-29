@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Infrastructure.DapperPersistence.Database;
+using CleanArchitecture.Infrastructure.DapperPersistence.Entities;
 using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
-using CleanArchitecture.Infrastructure.Persistence;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.DapperPersistence
 {
@@ -19,28 +25,34 @@ namespace CleanArchitecture.Infrastructure.DapperPersistence
             }
         }
 
-        public static async Task SeedSampleDataAsync(ApplicationDbContext context)
+        public static async Task SeedSampleDataAsync(ConnectionString connectionString)
         {
+            using IDbConnection connection = new SqlConnection(connectionString.Value);
+
+            IEnumerable<TodoList> todoLists = await connection.QueryAsync<TodoList>("SELECT * FROM TodoLists");
             // Seed, if necessary
-            if (!context.TodoLists.Any())
+            if (!todoLists.Any())
             {
-                context.TodoLists.Add(new TodoList
+                int listId = await connection.InsertAsync(new TodoList
                 {
                     Title = "Shopping",
-                    Items =
-                    {
-                        new TodoItem { Title = "Apples", Done = true },
-                        new TodoItem { Title = "Milk", Done = true },
-                        new TodoItem { Title = "Bread", Done = true },
-                        new TodoItem { Title = "Toilet paper" },
-                        new TodoItem { Title = "Pasta" },
-                        new TodoItem { Title = "Tissues" },
-                        new TodoItem { Title = "Tuna" },
-                        new TodoItem { Title = "Water" }
-                    }
+                    Created = DateTime.UtcNow,
+                    CreatedBy = Guid.NewGuid()
                 });
 
-                await context.SaveChangesAsync();
+                await connection.ExecuteAsync(
+                    "INSERT INTO TodoItems ( Title, Done, TodoListId ) VALUES ( @Title, @Done, @TodoListId)",
+                    new List<TodoItem>
+                    {
+                        new TodoItem {Title = "Apples", Done = true, TodoListId = listId },
+                        new TodoItem {Title = "Milk", Done = true, TodoListId = listId },
+                        new TodoItem {Title = "Bread", Done = true, TodoListId = listId },
+                        new TodoItem {Title = "Toilet paper", Done = false, TodoListId = listId },
+                        new TodoItem {Title = "Pasta", Done = false, TodoListId = listId },
+                        new TodoItem {Title = "Tissues", Done = false, TodoListId = listId },
+                        new TodoItem {Title = "Tuna", Done = false, TodoListId = listId },
+                        new TodoItem {Title = "Water", Done = false, TodoListId = listId }
+                    });
             }
         }
     }

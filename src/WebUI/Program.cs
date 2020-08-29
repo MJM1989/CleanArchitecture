@@ -1,13 +1,12 @@
-using CleanArchitecture.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using CleanArchitecture.Infrastructure.DapperPersistence;
+using CleanArchitecture.Infrastructure.DapperPersistence.Database;
 using CleanArchitecture.Infrastructure.DapperPersistence.Identity.Models;
 
 namespace CleanArchitecture.WebUI
@@ -24,17 +23,15 @@ namespace CleanArchitecture.WebUI
 
                 try
                 {
-                    var context = services.GetRequiredService<ApplicationDbContext>();
-
-                    if (context.Database.IsSqlServer())
-                    {
-                        context.Database.Migrate();
-                    }                   
+                    var connectionString = services.GetRequiredService<ConnectionString>();
+                    var migrationsPath = services.GetRequiredService<MigrationsPath>();
+                    
+                    new DatabaseMigration(connectionString, migrationsPath).Execute();
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
                     await ApplicationSeeder.SeedDefaultUserAsync(userManager);
-                    await ApplicationSeeder.SeedSampleDataAsync(context);
+                    await ApplicationSeeder.SeedSampleDataAsync(connectionString);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Common.Behaviours;
+﻿using System;
+using CleanArchitecture.Application.Common.Behaviours;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem;
 using Microsoft.Extensions.Logging;
@@ -25,16 +26,24 @@ namespace CleanArchitecture.Application.UnitTests.Common.Behaviours
             _identityService = new Mock<IIdentityService>();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            _logger.Reset();
+            _currentUserService.Reset();
+            _identityService.Reset();
+        }
+
         [Test]
         public async Task ShouldCallGetUserNameAsyncOnceIfAuthenticated()
         {
-            _currentUserService.Setup(x => x.UserId).Returns("Administrator");
+            _currentUserService.Setup(x => x.UserId).Returns(new Guid("2DBDA53D-6707-4E7A-86C9-50459151318C"));
 
             var requestLogger = new LoggingBehaviour<CreateTodoItemCommand>(_logger.Object, _currentUserService.Object, _identityService.Object);
 
             await requestLogger.Process(new CreateTodoItemCommand { ListId = 1, Title = "title" }, new CancellationToken());
 
-            _identityService.Verify(i => i.GetUserNameAsync(It.IsAny<string>()), Times.Once);
+            _identityService.Verify(i => i.GetUserNameAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
@@ -44,7 +53,7 @@ namespace CleanArchitecture.Application.UnitTests.Common.Behaviours
 
             await requestLogger.Process(new CreateTodoItemCommand { ListId = 1, Title = "title" }, new CancellationToken());
 
-            _identityService.Verify(i => i.GetUserNameAsync(null), Times.Never);
+            _identityService.Verify(i => i.GetUserNameAsync(It.IsAny<Guid>()), Times.Never);
         }
     }
 }

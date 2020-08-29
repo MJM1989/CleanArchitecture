@@ -3,12 +3,12 @@ using CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem;
 using CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItem;
 using CleanArchitecture.Application.TodoItems.Commands.UpdateTodoItemDetail;
 using CleanArchitecture.Application.TodoLists.Commands.CreateTodoList;
-using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Enums;
 using FluentAssertions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System;
+using CleanArchitecture.Infrastructure.DapperPersistence.Entities;
 
 namespace CleanArchitecture.Application.IntegrationTests.TodoItems.Commands
 {
@@ -57,7 +57,7 @@ namespace CleanArchitecture.Application.IntegrationTests.TodoItems.Commands
 
             var item = await FindAsync<TodoItem>(itemId);
 
-            item.ListId.Should().Be(command.ListId);
+            item.TodoListId.Should().Be(command.ListId);
             item.Note.Should().Be(command.Note);
             item.Priority.Should().Be(command.Priority);
             item.LastModifiedBy.Should().NotBeNull();
