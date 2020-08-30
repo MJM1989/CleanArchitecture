@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models;
 using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using ApplicationUser = CleanArchitecture.Infrastructure.Persistence.Identity.Models.ApplicationUser;
 
 namespace CleanArchitecture.Infrastructure.Persistence.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public IdentityService(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
         }
 
         public async Task<string> GetUserNameAsync(Guid userId)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+            ApplicationUser user = await userManager.FindByIdAsync(userId.ToString());
 
             return user.UserName;
         }
@@ -33,14 +31,14 @@ namespace CleanArchitecture.Infrastructure.Persistence.Identity
                 Email = userName,
             };
 
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await userManager.CreateAsync(user, password);
 
             return (result.ToApplicationResult(), user.Id);
         }
 
         public async Task<Result> DeleteUserAsync(Guid userId)
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+            ApplicationUser user = await userManager.FindByIdAsync(userId.ToString());
 
             if (user != null)
             {
@@ -52,7 +50,7 @@ namespace CleanArchitecture.Infrastructure.Persistence.Identity
 
         private async Task<Result> DeleteUserAsync(ApplicationUser user)
         {
-            var result = await _userManager.DeleteAsync(user);
+            IdentityResult result = await userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
         }

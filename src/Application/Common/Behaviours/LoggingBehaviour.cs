@@ -1,8 +1,8 @@
 ﻿using CleanArchitecture.Application.Common.Interfaces;
 using MediatR.Pipeline;
-using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CleanArchitecture.Application.Common.Behaviours
 {

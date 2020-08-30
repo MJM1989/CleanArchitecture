@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
 using CleanArchitecture.Application.Common.Interfaces;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CleanArchitecture.Application.Common.Behaviours
 {

@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchitecture.Infrastructure.Persistence.Identity.Stores
 {
-    public class UserStore : IUserStore<ApplicationUser>, IUserEmailStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>
+    public class UserStore : IUserStore<ApplicationUser>,
+        IUserEmailStore<ApplicationUser>, 
+        IUserPasswordStore<ApplicationUser>
     {
         private readonly IGetDbConnection getDbConnection;
 

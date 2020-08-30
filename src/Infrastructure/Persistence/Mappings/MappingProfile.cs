@@ -9,9 +9,7 @@ namespace CleanArchitecture.Infrastructure.Persistence.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<DbTodoList, TodoList>()
-                .ForMember(dest => dest.Items, opt =>
-                    opt.MapFrom(src => src.Items));
+            CreateMap<DbTodoList, TodoList>();
             CreateMap<TodoList, DbTodoList>();
 
             CreateMap<DbTodoItem, TodoItem>();

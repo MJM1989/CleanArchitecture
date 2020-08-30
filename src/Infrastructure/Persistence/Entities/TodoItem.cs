@@ -16,6 +16,6 @@ namespace CleanArchitecture.Infrastructure.Persistence.Entities
 
         public DateTime? Reminder { get; set; }
 
-        public PriorityLevel Priority { get; set; }
+        public PriorityLevel Priority { get; set; } = PriorityLevel.None;
     }
 }

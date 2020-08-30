@@ -1,6 +1,6 @@
 using System.Data;
+using System.Data.SqlClient;
 using CleanArchitecture.Application.Common.Interfaces;
-using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.Persistence.Database
 {

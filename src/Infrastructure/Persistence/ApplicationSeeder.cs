@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Infrastructure.Persistence.Database;
@@ -9,7 +10,6 @@ using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.Persistence
 {
@@ -19,7 +19,9 @@ namespace CleanArchitecture.Infrastructure.Persistence
         {
             var defaultUser = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
 
-            if (userManager.Users.All(u => u.UserName != defaultUser.UserName))
+            Task<ApplicationUser> userWithUsername = userManager.FindByNameAsync(defaultUser.UserName);
+
+            if (userWithUsername == null)
             {
                 await userManager.CreateAsync(defaultUser, "Administrator1!");
             }

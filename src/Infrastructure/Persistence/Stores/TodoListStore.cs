@@ -76,12 +76,12 @@ namespace CleanArchitecture.Infrastructure.Persistence.Stores
             using IDbConnection connection = getConnection.Get();
             using var multi = await connection.QueryMultipleAsync(query);
             
-            IEnumerable<DbTodoList> toDoLists = multi.Read<DbTodoList>();
-            IEnumerable<DbTodoItem> toDoItems = multi.Read<DbTodoItem>();
+            IEnumerable<TodoList> toDoLists = mapper.Map<IEnumerable<TodoList>>(multi.Read<DbTodoList>());
+            IEnumerable<TodoItem> toDoItems = mapper.Map<IEnumerable<TodoItem>>(multi.Read<DbTodoItem>());
 
             foreach (var todoList in toDoLists)
             {
-                todoList.Items = toDoItems.Where(todoItem => todoItem.TodoListId == todoList.Id);
+                todoList.Items = toDoItems.Where(todoItem => todoItem.ListId == todoList.Id).ToList();
             }
 
             return mapper.Map<IEnumerable<TodoList>>(toDoLists);

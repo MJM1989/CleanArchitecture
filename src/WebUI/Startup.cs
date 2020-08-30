@@ -36,7 +36,9 @@ namespace CleanArchitecture.WebUI
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddHttpContextAccessor();
-
+            
+            services.AddHealthChecks();
+            
             services.AddControllersWithViews(options => 
                 options.Filters.Add(new ApiExceptionFilter()));
 
@@ -75,7 +77,6 @@ namespace CleanArchitecture.WebUI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

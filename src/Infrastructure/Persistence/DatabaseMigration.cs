@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using CleanArchitecture.Infrastructure.Persistence.Database;
 using Dapper;
-using Microsoft.Data.SqlClient;
 
 namespace CleanArchitecture.Infrastructure.Persistence
 {
@@ -48,15 +47,10 @@ namespace CleanArchitecture.Infrastructure.Persistence
             return Directory.GetFiles(migrationsPath.Value)
                 .Select(Path.GetFileNameWithoutExtension)
                 .Where(fileName => !executedScripts.Contains(fileName))
-                .OrderBy(GetDateFromFileName);
+                .OrderBy(s => s);
         }
 
         private string GetSql(string fileName) =>
             File.ReadAllText(Path.Combine(migrationsPath.Value, $"{fileName}.sql"));
-
-        private static DateTime GetDateFromFileName(string fileName)
-            => DateTime.ParseExact(fileName.Substring(0, 12),
-                "yyyyMMddHHmm",
-                null);
     }
 }

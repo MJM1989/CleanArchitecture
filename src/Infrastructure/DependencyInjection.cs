@@ -28,8 +28,9 @@ namespace CleanArchitecture.Infrastructure
  
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddDefaultTokenProviders();
-            
-            // services.AddIdentityServer()
+
+            services.AddIdentityServer()
+                .AddInMemoryPersistedGrants();
             //     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
@@ -45,7 +46,7 @@ namespace CleanArchitecture.Infrastructure
             services.AddScoped<IGetDbConnection, SqlConnectionGetter>();
             
             MigrationsPath migrationsPath = new MigrationsPath(Path.Combine(environment.ContentRootPath, 
-                "../Infrastructure/Persistence/SQL/Migrations/"));
+                "../Infrastructure/Persistence/Migrations/"));
             services.AddSingleton(migrationsPath);
 
             services.AddSingleton<IMigrateDatabase, DatabaseMigration>();
