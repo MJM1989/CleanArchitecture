@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using ApplicationUser = CleanArchitecture.Infrastructure.Persistence.Identity.Models.ApplicationUser;
+using ApplicationUser = CleanArchitecture.Infrastructure.Identity.Models.ApplicationUser;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Identity
+namespace CleanArchitecture.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {

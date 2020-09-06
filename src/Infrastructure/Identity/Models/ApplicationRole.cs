@@ -1,6 +1,6 @@
 using System;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Identity.Models
+namespace CleanArchitecture.Infrastructure.Identity.Models
 {
     public class ApplicationRole
     {

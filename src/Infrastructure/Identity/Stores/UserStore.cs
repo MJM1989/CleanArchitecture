@@ -3,12 +3,12 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
+using CleanArchitecture.Infrastructure.Identity.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.AspNetCore.Identity;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Identity.Stores
+namespace CleanArchitecture.Infrastructure.Identity.Stores
 {
     public class UserStore : IUserStore<ApplicationUser>,
         IUserEmailStore<ApplicationUser>, 

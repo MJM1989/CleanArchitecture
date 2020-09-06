@@ -2,11 +2,11 @@
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Stores;
 using CleanArchitecture.Infrastructure.Files;
+using CleanArchitecture.Infrastructure.Identity;
+using CleanArchitecture.Infrastructure.Identity.Models;
+using CleanArchitecture.Infrastructure.Identity.Stores;
 using CleanArchitecture.Infrastructure.Persistence;
 using CleanArchitecture.Infrastructure.Persistence.Database;
-using CleanArchitecture.Infrastructure.Persistence.Identity;
-using CleanArchitecture.Infrastructure.Persistence.Identity.Models;
-using CleanArchitecture.Infrastructure.Persistence.Identity.Stores;
 using CleanArchitecture.Infrastructure.Persistence.Stores;
 using CleanArchitecture.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ApplicationUser = CleanArchitecture.Infrastructure.Persistence.Identity.Models.ApplicationUser;
+using ApplicationUser = CleanArchitecture.Infrastructure.Identity.Models.ApplicationUser;
 
 namespace CleanArchitecture.Infrastructure
 {
